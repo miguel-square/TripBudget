@@ -82,11 +82,13 @@ erDiagram
     TRIP ||--o{ TRIPUSER : has
     TRIPUSER }|--|{ USER : "is in"
     USEREXPENSE {
-        int user_id PK
-        int expense_id PK
+        int id PK
+        int user_id FK
+        int expense_id FK
     }
     TRIPUSER {
-        int user_id PK
-        int trip_id PK
+        int id PK
+        int user_id FK
+        int trip_id FK
     }
 ```
