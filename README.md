@@ -42,10 +42,51 @@ When a group of friends or family prepare a trip or party together, is hard to k
 
 ```mermaid
 erDiagram
-    USER ||..o{ ROLE : "has a"
-    USER o{--|| EXPENSE : creates
-    TRIP o{--|| USER : contains
-    EXPENSE ||--o{ USER : "pertains several"
+    USER ||..o{ ROLE : "has"
+    USER o{--|| TRIP : has
+    TRIP o{--|| EXPENSE : has
+    EXPENSE ||--o{ USEREXPENSE : has
+    USEREXPENSE }|--|{ USER : "is in"
 ```
 
+### Entity Relationship Diagram
 
+```mermaid
+erDiagram
+    USER ||..o{ ROLE : "has"
+    USER {
+        int id PK
+        text username
+        text first_name
+        text second_name
+        text password
+        int role_id FK
+    }
+    ROLE {
+        int id PK
+        text name
+    }
+    USER o{--|| TRIP : creates
+    TRIP o{--|| EXPENSE : has
+    TRIP {
+        int id PK
+        text name       
+    }
+    EXPENSE {
+        int id PK
+        text description
+        float value
+    }
+    EXPENSE ||--o{ USEREXPENSE : has
+    USEREXPENSE }|--|{ USER : "is in"
+    TRIP ||--o{ TRIPUSER : has
+    TRIPUSER }|--|{ USER : "is in"
+    USEREXPENSE {
+        int user_id PK
+        int expense_id PK
+    }
+    TRIPUSER {
+        int user_id PK
+        int trip_id PK
+    }
+```
