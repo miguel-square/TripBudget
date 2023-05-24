@@ -35,3 +35,17 @@ When a group of friends or family prepare a trip or party together, is hard to k
 ### Will not have
 
 - Connection with payment platforms
+
+## Domain Model
+
+## Domain Model
+
+```mermaid
+erDiagram
+    USER ||..o{ ROLE : "has a"
+    USER o{--|| EXPENSE : creates
+    TRIP o{--|| USER : contains
+    EXPENSE ||--o{ USER : "pertains several"
+```
+
+
