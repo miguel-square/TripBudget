@@ -1,94 +1,118 @@
 # Overview
 
-An app that a whole group of people share, to keep track of the expenses of a shared trip and make clear who owns what to whom.
+An app for a group of people that plans a trip, event or general get-together and need to keep track of the expenses each of the individuals makes, the ida is to make clear who owns what to whom at the end.
 
 ## Problem Definition
 
-When a group of friends or family prepare a trip or party together, is hard to keep track manually of the expenses. The idea is to have a record for every expense, who made it, when, and who else it concern, and make a final tally of all the individual debts.
+When a group of friends or family prepare a trip or an event together, is hard to keep track manually of the expenses. The idea is to have a record for every expense, who made it, when, and who else is involve in it, and make a final tally of all the individual debts.
 
 ## Priorities
 
 ### Must have
 
-- An admin must be able to create a "trip". 
-- A user must be able to sign to a specific trip
-- A user must be able to login
-- A user must be able to add a expenditure with name, date, value and a link to other users 
-- A user must be able to edit a expenditure.
+- An Admin must be able to create an "Event". 
+- A User must be able to sign-in to a specific Event.
+- A User must be able to sign-up and login.
+- A User must be able to add a Expenditure with name, date, value and a link to involved Users 
 - A user must be able to see a tally of each debt status with another user.
+- A User must be able to mark a debt as settled (open to revision).
 
 ### Should have
 
-- A user should be able to select a date from a date picker with a possible date range.
-- A user should have the ability to see previous trips.
-- A user should be able to easy split an expenditure en equal parts between all other users.
-- A user should be able to create repeated expenses.
-- An admin should be able to mark the expenditures with status, specially "in discussion". 
+- A User should have the ability to see previous Events.
+- An Admin should be able to mark the expenditures with status, specially "disputed". 
+- A User should be able to edit a Expenditure.
 
 ### Could have
 
-- A user should be able to message another user about a expenditure.
-- An admin can see a graph of all the debts between the party.
-- A user could send a templated message to another user with the debts between them.
+- A User could see a summary of all his tabs with the rest of the users.
 - A user could select an icon or emoji to mark a expenditure.
+- An Event could have a type (e.g. Trip, Diner)
+- A User could be able to create a templated repeated expense.
+- A User could select a date within a limited range.
+- A User could split an Expenditure in different percentages each of the involved party.
+- An Expenditure could have a specific currency.
 
 ### Will not have
 
 - Connection with payment platforms
+- Messaging tool for the users.
 
-## Domain Model
 
 ## Domain Model
 
 ```mermaid
 erDiagram
     USER ||..o{ ROLE : "has"
-    USER o{--|| TRIP : has
-    TRIP o{--|| EXPENSE : has
+    EXPENSE ||..o{ CURRENCY : "has"
+    EVENT ||..o{ TYPE : "has"
+    EVENT o{--|| EXPENSE : has
     EXPENSE ||--o{ USEREXPENSE : has
     USEREXPENSE }|--|{ USER : "is in"
+    EVENT ||--o{ EVENTUSER : has
+    EVENTUSER }|--|{ USER : "is in"  
 ```
 
 ### Entity Relationship Diagram
 
 ```mermaid
 erDiagram
-    USER ||..o{ ROLE : "has"
     USER {
         int id PK
         text username
+        text email
         text first_name
         text second_name
         text password
         int role_id FK
     }
-    ROLE {
+    EVENT {
         int id PK
         text name
-    }
-    USER o{--|| TRIP : creates
-    TRIP o{--|| EXPENSE : has
-    TRIP {
-        int id PK
-        text name       
+        date start_date
+        date end_date
+        int type_id FK       
     }
     EXPENSE {
         int id PK
         text description
         float value
+        timestamp date
+        int currency_id FK
     }
-    EXPENSE ||--o{ USEREXPENSE : has
-    USEREXPENSE }|--|{ USER : "is in"
-    TRIP ||--o{ TRIPUSER : has
-    TRIPUSER }|--|{ USER : "is in"
+    ROLE {
+        int id PK
+        text name
+    }
+    TYPE {
+        int id PK
+        text name
+    }
+    CURRENCY {
+        int id PK
+        text name
+        text prefix
+    }
     USEREXPENSE {
         int id PK
         int user_id FK
         int expense_id FK
+        bool is_owner
+        float ratio
+        bool paid
     }
-    TRIPUSER {
+    EVENTUSER {
         int id PK
         int user_id FK
         int trip_id FK
+        bool is_admin
     }
+    USER ||..o{ ROLE : "has"
+    EXPENSE ||..o{ CURRENCY : "has"
+    EVENT ||..o{ TYPE : "has"
+    EVENT o{--|| EXPENSE : has
+    EXPENSE ||--o{ USEREXPENSE : has
+    USEREXPENSE }|--|{ USER : "is in"
+    EVENT ||--o{ EVENTUSER : has
+    EVENTUSER }|--|{ USER : "is in"    
 ```
