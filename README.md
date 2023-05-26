@@ -43,7 +43,6 @@ When a group of friends or family prepare a trip or an event together, is hard t
 
 ```mermaid
 erDiagram
-    USER ||..o{ ROLE : "has"
     EXPENSE ||..o{ CURRENCY : "has"
     EVENT ||..o{ TYPE : "has"
     EVENT o{--|| EXPENSE : has
@@ -64,7 +63,6 @@ erDiagram
         text first_name
         text second_name
         text password
-        int role_id FK
     }
     EVENT {
         int id PK
@@ -79,10 +77,7 @@ erDiagram
         float value
         timestamp date
         int currency_id FK
-    }
-    ROLE {
-        int id PK
-        text name
+        int event_id FK
     }
     TYPE {
         int id PK
@@ -107,7 +102,6 @@ erDiagram
         int trip_id FK
         bool is_admin
     }
-    USER ||..o{ ROLE : "has"
     EXPENSE ||..o{ CURRENCY : "has"
     EVENT ||..o{ TYPE : "has"
     EVENT o{--|| EXPENSE : has
