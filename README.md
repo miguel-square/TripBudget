@@ -10,17 +10,17 @@ When a group of friends or family prepare a trip or an event together, is hard t
 
 ### Must have
 
-- An Admin must be able to create an "Event". 
+- An Admin must be able to create an "Event".
 - A User must be able to sign-in to a specific Event.
 - A User must be able to sign-up and login.
-- A User must be able to add a Expenditure with name, date, value and a link to involved Users 
+- A User must be able to add a Expenditure with name, date, value and a link to involved Users
 - A user must be able to see a tally of each debt status with another user.
 - A User must be able to mark a debt as settled (open to revision).
 
 ### Should have
 
 - A User should have the ability to see previous Events.
-- An Admin should be able to mark the expenditures with status, specially "disputed". 
+- An Admin should be able to mark the expenditures with status, specially "disputed".
 - A User should be able to edit a Expenditure.
 
 ### Could have
@@ -38,7 +38,6 @@ When a group of friends or family prepare a trip or an event together, is hard t
 - Connection with payment platforms
 - Messaging tool for the users.
 
-
 ## Domain Model
 
 ```mermaid
@@ -49,7 +48,7 @@ erDiagram
     EXPENSE ||--o{ USEREXPENSE : has
     USEREXPENSE }|--|{ USER : "is in"
     EVENT ||--o{ EVENTUSER : has
-    EVENTUSER }|--|{ USER : "is in"  
+    EVENTUSER }|--|{ USER : "is in"
 ```
 
 ### Entity Relationship Diagram
@@ -69,7 +68,7 @@ erDiagram
         text name
         date start_date
         date end_date
-        int type_id FK       
+        int type_id FK
     }
     EXPENSE {
         int id PK
@@ -108,5 +107,354 @@ erDiagram
     EXPENSE ||--o{ USEREXPENSE : has
     USEREXPENSE }|--|{ USER : "is in"
     EVENT ||--o{ EVENTUSER : has
-    EVENTUSER }|--|{ USER : "is in"    
+    EVENTUSER }|--|{ USER : "is in"
+```
+
+## API Specification
+
+### Users
+
+`GET /user/{user_id}`
+
+###### Retrieves a specific user by their ID.
+
+Response: `200 OK`
+
+```json
+{
+  "user_id": 1,
+  "username": "andrewt",
+  "email": "andrew@example.com",
+  "first_name": "Andrew",
+  "second_name": "Taylor",
+  "password": "********"
+}
+```
+
+---
+
+`POST /user`
+
+###### Creates a new user.
+
+Request:
+
+```json
+{
+  "username": "johnd",
+  "email": "john@example.com",
+  "first_name": "John",
+  "second_name": "Doe",
+  "password": "********"
+}
+```
+
+Response: `201 Created`
+
+```json
+{
+  "user_id": 2,
+  "username": "johnd",
+  "email": "john@example.com",
+  "first_name": "John",
+  "second_name": "Doe",
+  "password": "********"
+}
+```
+
+---
+
+`PUT /user/{user_id}`
+
+###### Updates an existing user.
+
+Request:
+
+```json
+{
+  "first_name": "Jane",
+  "second_name": "Doe",
+  "password": "********"
+}
+```
+
+Response: `200 OK`
+
+```json
+{
+  "user_id": 2,
+  "username": "johnd",
+  "email": "john@example.com",
+  "first_name": "Jane",
+  "second_name": "Doe",
+  "password": "********"
+}
+```
+
+---
+
+`DELETE /users/{user_id}`
+
+###### Deletes an existing user.
+
+Response: `204 No Content`
+
+---
+
+`GET /user`
+
+###### Retrieves a list of users.
+
+Response: `200 OK`
+
+```json
+{
+  "user_id": 1,
+  "username": "andrewt",
+  "email": "andrew@example.com",
+  "first_name": "Andrew",
+  "second_name": "Taylor",
+  "password": "********"
+},
+{
+  "user_id": 2,
+  "username": "johnd",
+  "email": "john@example.com",
+  "first_name": "John",
+  "second_name": "Doe",
+  "password": "********"
+}
+```
+
+---
+
+---
+
+### Events
+
+`GET /event/{event_id}`
+
+###### Retrieves a specific event by their ID.
+
+Response: `200 OK`
+
+```json
+{
+  "event_id": 1,
+  "name": "Some Event",
+  "start_date": "2023-05-01",
+  "end_date": "2023-05-05",
+  "type_id": 1
+}
+```
+
+---
+
+`POST /event`
+
+###### Creates a new event.
+
+Request:
+
+```json
+{
+  "name": "New Event",
+  "start_date": "2023-06-01",
+  "end_date": "2023-06-05",
+  "type_id": 1
+}
+```
+
+Response: `201 Created`
+
+```json
+{
+  "event_id": 2,
+  "name": "New Event",
+  "start_date": "2023-06-01",
+  "end_date": "2023-06-05",
+  "type_id": 1
+}
+```
+
+---
+
+`PUT /event/{event_id}`
+
+###### Updates an existing event.
+
+Request:
+
+```json
+{
+  "name": "Updated Event",
+  "start_date": "2023-07-01",
+  "end_date": "2023-07-05",
+  "type_id": 2
+}
+```
+
+Response: `200 OK`
+
+```json
+{
+  "event_id": 2,
+  "name": "Updated Event",
+  "start_date": "2023-07-01",
+  "end_date": "2023-07-05",
+  "type_id": 2
+}
+```
+
+---
+
+`DELETE /events/{event_id}`
+
+###### Deletes an existing event.
+
+Response: `204 No Content`
+
+---
+
+`GET /event`
+
+###### Retrieves a list of events.
+
+Response: `200 OK`
+
+```json
+{
+  "event_id": 1,
+  "name": "Some Event",
+  "start_date": "2023-05-01",
+  "end_date": "2023-05-05",
+  "type_id": 1
+},
+{
+  "event_id": 2,
+  "name": "Updated Event",
+  "start_date": "2023-07-01",
+  "end_date": "2023-07-05",
+  "type_id": 2
+}
+```
+
+---
+
+---
+
+### Expenses
+
+`GET /expense/{expense_id}`
+
+###### Retrieves a specific expense by their ID.
+
+Response: `200 OK`
+
+```json
+{
+  "expense_id": 1,
+  "description": "Some Expense",
+  "value": 50.25,
+  "date": "2023-05-10T14:30:00Z",
+  "currency_id": 1,
+  "event_id": 1
+}
+```
+
+---
+
+`POST /expense`
+
+###### Creates a new expense.
+
+Request:
+
+```json
+{
+  "description": "New Expense",
+  "value": 100.5,
+  "date": "2023-06-15T10:00:00Z",
+  "currency_id": 1,
+  "event_id": 1
+}
+```
+
+Response: `201 Created`
+
+```json
+{
+  "expense_id": 2,
+  "description": "New Expense",
+  "value": 100.5,
+  "date": "2023-06-15T10:00:00Z",
+  "currency_id": 1,
+  "event_id": 1
+}
+```
+
+---
+
+`PUT /expense/{expense_id}`
+
+###### Updates an existing expense.
+
+Request:
+
+```json
+{
+  "description": "Updated Expense",
+  "value": 75.0,
+  "date": "2023-07-20T16:45:00Z",
+  "currency_id": 2,
+  "event_id": 2
+}
+```
+
+Response: `200 OK`
+
+```json
+{
+  "expense_id": 2,
+  "description": "Updated Expense",
+  "value": 75.0,
+  "date": "2023-07-20T16:45:00Z",
+  "currency_id": 2,
+  "event_id": 2
+}
+```
+
+---
+
+`DELETE /expenses/{expense_id}`
+
+###### Deletes an existing expense.
+
+Response: `204 No Content`
+
+---
+
+`GET /expense`
+
+###### Retrieves a list of expenses.
+
+Response: `200 OK`
+
+```json
+{
+  "expense_id": 1,
+  "description": "Some Expense",
+  "value": 50.25,
+  "date": "2023-05-10T14:30:00Z",
+  "currency_id": 1,
+  "event_id": 1
+},
+{
+  "expense_id": 2,
+  "description": "Updated Expense",
+  "value": 75.0,
+  "date": "2023-07-20T16:45:00Z",
+  "currency_id": 2,
+  "event_id": 2
+}
 ```
