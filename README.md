@@ -752,8 +752,6 @@ Request
 Response: 200 OK
 
 ```json
-
-Status
 {
   "user_expense_id": 3,
   "user_id": 1,
