@@ -193,7 +193,7 @@ Response: `200 OK`
 
 ---
 
-`DELETE /users/{user_id}`
+`DELETE /user/{user_id}`
 
 ###### Deletes an existing user.
 
@@ -308,7 +308,7 @@ Response: `200 OK`
 
 ---
 
-`DELETE /events/{event_id}`
+`DELETE /event/{event_id}`
 
 ###### Deletes an existing event.
 
@@ -426,7 +426,7 @@ Response: `200 OK`
 
 ---
 
-`DELETE /expenses/{expense_id}`
+`DELETE /expense/{expense_id}`
 
 ###### Deletes an existing expense.
 
@@ -458,3 +458,424 @@ Response: `200 OK`
   "event_id": 2
 }
 ```
+
+---
+
+---
+
+### Currencies
+
+`GET /currency/{currency_id}`
+
+###### Retrieves a specific currency by their ID.
+
+Response: `200 OK`
+
+```json
+{
+  "currency_id": 1,
+  "name": "USD",
+  "prefix": "$"
+}
+```
+
+---
+
+`POST /currency`
+
+###### Creates a new currency.
+
+Request:
+
+```json
+{
+  "name": "EUR",
+  "prefix": "€"
+}
+```
+
+Response: `201 Created`
+
+```json
+{
+  "currency_id": 2,
+  "name": "EUR",
+  "prefix": "€"
+}
+```
+
+---
+
+`PUT /currency/{currency_id}`
+
+###### Updates an existing currency.
+
+Request:
+
+```json
+{
+  "name": "GBP",
+  "prefix": "£"
+}
+```
+
+Response: `200 OK`
+
+```json
+{
+  "currency_id": 2,
+  "name": "GBP",
+  "prefix": "£"
+}
+```
+
+---
+
+`DELETE /currency/{currency_id}`
+
+###### Deletes an existing currency.
+
+Response: `204 No Content`
+
+---
+
+`GET /currency`
+
+###### Retrieves a list of currencies.
+
+Response: `200 OK`
+
+```json
+{
+  "currency_id": 1,
+  "name": "USD",
+  "prefix": "$"
+},
+{
+  "currency_id": 2,
+  "name": "GBP",
+  "prefix": "£"
+}
+```
+
+---
+
+---
+
+### Event Types
+
+`GET /type/{type_id}`
+
+###### Retrieves a specific type by their ID.
+
+Response: `200 OK`
+
+```json
+{
+  "type_id": 1,
+  "name": "Trip"
+}
+```
+
+---
+
+`POST /type`
+
+###### Creates a new type.
+
+Request:
+
+```json
+{
+  "name": "Dinner"
+}
+```
+
+Response: `201 Created`
+
+```json
+{
+  "type_id": 2,
+  "name": "Dinner"
+}
+```
+
+---
+
+`PUT /type/{type_id}`
+
+###### Updates an existing type.
+
+Request:
+
+```json
+{
+  "name": "Brunch"
+}
+```
+
+Response: `200 OK`
+
+```json
+{
+  "type_id": 2,
+  "name": "Brunch"
+}
+```
+
+---
+
+`DELETE /types/{type_id}`
+
+###### Deletes an existing type.
+
+Response: `204 No Content`
+
+---
+
+`GET /type`
+
+###### Retrieves a list of types.
+
+Response: `200 OK`
+
+```json
+{
+  "type_id": 1,
+  "name": "Trip"
+},
+{
+  "type_id": 2,
+  "name": "Brunch"
+}
+```
+
+---
+
+---
+
+### User Expense Relation
+
+`GET /user_expense/{user_expense_id}`
+
+###### Retrieves a specific user expense relation by their ID.
+
+Response: `200 OK`
+
+```json
+{
+  "user_expense_id": 1,
+  "user_id": 1,
+  "expense_id": 1,
+  "is_owner": true,
+  "ratio": 0.5,
+  "paid": false
+}
+```
+
+---
+
+`GET /user_expense`
+
+###### Retrieves a list of user expense relation relations.
+
+Response: 200 OK
+
+```json
+[
+  {
+    "user_expense_id": 1,
+    "user_id": 1,
+    "expense_id": 1,
+    "is_owner": true,
+    "ratio": 0.5,
+    "paid": false
+  },
+  {
+    "user_expense_id": 2,
+    "user_id": 2,
+    "expense_id": 1,
+    "is_owner": false,
+    "ratio": 0.5,
+    "paid": false
+  }
+]
+```
+
+---
+
+`POST /user_expense`
+
+###### Creates a new user expense relation.
+
+Request
+
+```json
+{
+  "user_id": 1,
+  "expense_id": 2,
+  "is_owner": true,
+  "ratio": 0.3,
+  "paid": false
+}
+```
+
+Response: 201 Created
+
+```json
+{
+  "user_expense_id": 3,
+  "user_id": 1,
+  "expense_id": 2,
+  "is_owner": true,
+  "ratio": 0.3,
+  "paid": false
+}
+```
+
+---
+
+`PUT /user_expense/{user_expense_id}`
+
+###### Updates an existing user expense relation.
+
+Request
+
+```json
+{
+  "is_owner": false,
+  "ratio": 0.2,
+  "paid": true
+}
+```
+
+Response: 200 OK
+
+```json
+
+Status
+{
+  "user_expense_id": 3,
+  "user_id": 1,
+  "expense_id": 2,
+  "is_owner": false,
+  "ratio": 0.2,
+  "paid": true
+}
+```
+
+---
+
+`DELETE /user_expense/{user_expense_id}`
+
+###### Deletes an existing user expense relation.
+
+Response: 204 No Content
+
+---
+
+---
+
+### Event User Relations
+
+`GET /event_user/{event_user_id}`
+
+###### Retrieves a specific event user relation by their ID.
+
+Response: `200 OK`
+
+```json
+{
+  "event_user_id": 1,
+  "user_id": 1,
+  "event_id": 1,
+  "is_admin": true
+}
+```
+
+---
+
+`GET /event_user`
+
+###### Retrieves a list of event user relation relations.
+
+Response: 200 OK
+
+```json
+[
+  {
+    "event_user_id": 1,
+    "user_id": 1,
+    "event_id": 1,
+    "is_admin": true
+  },
+  {
+    "event_user_id": 2,
+    "user_id": 2,
+    "event_id": 1,
+    "is_admin": false
+  }
+]
+```
+
+---
+
+`POST /event_user`
+
+###### Creates a new event user relation.
+
+Request
+
+```json
+{
+  "user_id": 1,
+  "event_id": 2,
+  "is_admin": false
+}
+```
+
+Response: 201 Created
+
+```json
+{
+  "event_user_id": 3,
+  "user_id": 1,
+  "event_id": 2,
+  "is_admin": false
+}
+```
+
+---
+
+`PUT /event_user/{event_user_id}`
+
+###### Updates an existing event user relation.
+
+Request
+
+```json
+{
+  "is_admin": true
+}
+```
+
+Response: 200 OK
+
+```json
+{
+  "event_user_id": 3,
+  "user_id": 1,
+  "event_id": 2,
+  "is_admin": true
+}
+```
+
+---
+
+`DELETE /event_user/{event_user_id}`
+
+###### Deletes an existing event user relation.
+
+Response: 204 No Content
+
+---
