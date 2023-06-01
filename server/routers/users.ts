@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { usersController } from "../controllers/user";
 
 const userRouter = Router();
 
@@ -81,9 +82,7 @@ userRouter.route("/").post((req, res) => {
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-userRouter.route("/").get((req, res) => {
-  res.send("Hello vue academy");
-});
+userRouter.route("/").get(usersController.getAllUsers);
 
 /**
  * @swagger
