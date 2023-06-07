@@ -16,9 +16,7 @@ async function createUser(req: Request, res: Response) {
 }
 
 async function getAllUsers(req: Request, res: Response) {
-  const users = await prisma.user.findMany({
-    select: { email: true, id: true },
-  });
+  const users = await prisma.user.findMany({});
   if (users && users.length > 0) {
     res.status(200).json(users);
   } else {
