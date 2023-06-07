@@ -1,4 +1,7 @@
 import { Router } from "express";
+import { validation } from "../utils";
+import { check } from "express-validator";
+import { eventUserController } from "../controllers/event-user";
 
 const eventUserRouter = Router();
 
@@ -27,24 +30,59 @@ const eventUserRouter = Router();
  *           example: true
  */
 
-eventUserRouter.route("/").get((req, res) => {
-  res.send("Hello vue academy");
-});
+/**
+ * @swagger
+ * /event_user:
+ *   post:
+ *     tags: [
+ *       event-user
+ *     ]
+ *     description: Creates a new Event-User object
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/EventUser'
+ *       description: Created event-user object
+ *       required: true
+ *     responses:
+ *       400:
+ *         description: Bad Request - required values are missing.
+ *       201:
+ *         description: EventUser Created
+ */
+eventUserRouter
+  .route("/")
+  .post(
+    [
+      check("user_id").exists().isInt(),
+      check("event_id").exists().isInt(),
+      check("is_admin").exists().isBoolean(),
+    ],
+    validation.validate,
+    eventUserController.createEventUser
+  );
 
-eventUserRouter.route("/:eventUserId").get((req, res) => {
-  res.send("Get Single vue academy" + req.params.eventUserId);
-});
+eventUserRouter.route("/").get(eventUserController.getAllEventUsers);
 
-eventUserRouter.route("/").post((req, res) => {
-  res.send("Create vue academy");
-});
+eventUserRouter
+  .route("/:eventUserId(\\d+)")
+  .get(eventUserController.getEventUserById);
 
-eventUserRouter.route("/:eventUserId").put((req, res) => {
-  res.send("Update vue academy" + req.params.eventUserId);
-});
+eventUserRouter
+  .route("/:eventUserId")
+  .put(
+    [
+      check("user_id").exists().isInt(),
+      check("event_id").exists().isInt(),
+      check("is_admin").exists().isBoolean(),
+    ],
+    validation.validate,
+    eventUserController.updateEventUser
+  );
 
-eventUserRouter.route("/:eventUserId").delete((req, res) => {
-  res.send("Delete vue academy" + req.params.eventUserId);
-});
+eventUserRouter
+  .route("/:eventUserId")
+  .delete(eventUserController.deleteEventUserById);
 
 export { eventUserRouter };

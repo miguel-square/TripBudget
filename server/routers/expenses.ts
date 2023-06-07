@@ -1,4 +1,7 @@
 import { Router } from "express";
+import { validation } from "../utils";
+import { check } from "express-validator";
+import { expenseController } from "../controllers/expense";
 
 const expenseRouter = Router();
 
@@ -37,26 +40,48 @@ const expenseRouter = Router();
  * @swagger
  * /expense:
  *   post:
- *     tags: [
- *       expense
- *     ]
- *     description: Creates a new expense
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Expense'
- *       description: Created expense object
- *       required: true
+ *     description: Updates a expense object based on its id.
+ *     tags:
+ *      - expense
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Numeric ID of the expense to update.
+ *         schema:
+ *           type: integer
  *     responses:
- *       400:
- *         description: Bad Request - required values are missing.
- *       201:
- *         description: Expense Created
+ *       200:
+ *         description: A valid expense object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Expense'
  */
-expenseRouter.route("/").post((req, res) => {
-  res.send("Create vue academy");
-});
+expenseRouter
+  .route("/")
+  .post(
+    [
+      check("description")
+        .exists()
+        .trim()
+        .isLength({ min: 3 })
+        .withMessage("the description must have a minimum length of 3"),
+      check("value")
+        .exists()
+        .isFloat()
+        .withMessage("the value must be a valid number"),
+      check("date")
+        .exists()
+        .isDate()
+        .withMessage("The expense must have a valid date"),
+      check("currency_id").optional().isInt(),
+    ],
+    validation.validate,
+    expenseController.createExpense
+  );
 
 /**
  * @swagger
@@ -75,9 +100,7 @@ expenseRouter.route("/").post((req, res) => {
  *               items:
  *                 $ref: '#/components/schemas/Expense'
  */
-expenseRouter.route("/").get((req, res) => {
-  res.send("Hello vue academy");
-});
+expenseRouter.route("/").get(expenseController.getAllExpenses);
 
 /**
  * @swagger
@@ -104,9 +127,7 @@ expenseRouter.route("/").get((req, res) => {
  *       204:
  *         description: No content
  */
-expenseRouter.route("/:expenseId").get((req, res) => {
-  res.send("Get Single vue academy" + req.params.expenseId);
-});
+expenseRouter.route("/:expenseId(\\d+)").get(expenseController.getExpenseById);
 
 /**
  * @swagger
@@ -132,9 +153,28 @@ expenseRouter.route("/:expenseId").get((req, res) => {
  *               items:
  *                 $ref: '#/components/schemas/Expense'
  */
-expenseRouter.route("/:expenseId").put((req, res) => {
-  res.send("Update vue academy" + req.params.expenseId);
-});
+expenseRouter
+  .route("/:expense_id(\\d+)")
+  .put(
+    [
+      check("description")
+        .exists()
+        .trim()
+        .isLength({ min: 3 })
+        .withMessage("the description must have a minimum length of 3"),
+      check("value")
+        .exists()
+        .isFloat()
+        .withMessage("the value must be a valid number"),
+      check("date")
+        .exists()
+        .isDate()
+        .withMessage("The expense must have a valid date"),
+      check("currency_id").optional().isInt(),
+    ],
+    validation.validate,
+    expenseController.updateExpense
+  );
 
 /**
  * @swagger
@@ -154,8 +194,6 @@ expenseRouter.route("/:expenseId").put((req, res) => {
  *       204:
  *         description: The expense has been deleted.
  */
-expenseRouter.route("/:expenseId").delete((req, res) => {
-  res.send("Delete vue academy" + req.params.expenseId);
-});
+expenseRouter.route("/:expenseId").delete(expenseController.deleteExpenseById);
 
 export { expenseRouter };

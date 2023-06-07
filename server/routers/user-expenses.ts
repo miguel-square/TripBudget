@@ -1,4 +1,7 @@
 import { Router } from "express";
+import { validation } from "../utils";
+import { check } from "express-validator";
+import { userExpenseController } from "../controllers/user-expense";
 
 const userExpenseRouter = Router();
 
@@ -36,24 +39,63 @@ const userExpenseRouter = Router();
  *           example: false
  */
 
-userExpenseRouter.route("/").get((req, res) => {
-  res.send("Hello vue academy");
-});
+/**
+ * @swagger
+ * /user_expense:
+ *   post:
+ *     tags: [
+ *       user-expense
+ *     ]
+ *     description: Creates a new user-expense object
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserExpense'
+ *       description: Created user-expense object
+ *       required: true
+ *     responses:
+ *       400:
+ *         description: Bad Request - required values are missing.
+ *       201:
+ *         description: user-expense object Created
+ */
+userExpenseRouter
+  .route("/")
+  .post(
+    [
+      check("user_id").exists().isInt(),
+      check("expense_id").exists().isInt(),
+      check("is_owner").exists().isBoolean(),
+      check("paid").optional().isBoolean(),
+      check("ratio").optional().isFloat(),
+    ],
+    validation.validate,
+    userExpenseController.createUserExpense
+  );
 
-userExpenseRouter.route("/:userExpenseId").get((req, res) => {
-  res.send("Get Single vue academy" + req.params.userExpenseId);
-});
+userExpenseRouter.route("/").get(userExpenseController.getAllUserExpenses);
 
-userExpenseRouter.route("/").post((req, res) => {
-  res.send("Create vue academy");
-});
+userExpenseRouter
+  .route("/:userExpenseId(\\d+)")
+  .get(userExpenseController.getUserExpenseById);
 
-userExpenseRouter.route("/:userExpenseId").put((req, res) => {
-  res.send("Update vue academy" + req.params.userExpenseId);
-});
+userExpenseRouter
+  .route("/:userExpenseId")
+  .put(
+    [
+      check("user_id").exists().isInt(),
+      check("expense_id").exists().isInt(),
+      check("is_owner").exists().isBoolean(),
+      check("paid").optional().isBoolean(),
+      check("ratio").optional().isFloat(),
+    ],
+    validation.validate,
+    userExpenseController.updateUserExpense
+  );
 
-userExpenseRouter.route("/:userExpenseId").delete((req, res) => {
-  res.send("Delete vue academy" + req.params.userExpenseId);
-});
+userExpenseRouter
+  .route("/:userExpenseId")
+  .delete(userExpenseController.deleteUserExpenseById);
 
 export { userExpenseRouter };

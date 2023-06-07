@@ -1,4 +1,7 @@
 import { Router } from "express";
+import { validation } from "../utils";
+import { check } from "express-validator";
+import { eventController } from "../controllers/event";
 
 const eventRouter = Router();
 
@@ -33,24 +36,77 @@ const eventRouter = Router();
  *           example: 1
  */
 
-eventRouter.route("/").get((req, res) => {
-  res.send("Hello vue academy");
-});
+/**
+ * @swagger
+ * /event:
+ *   post:
+ *     tags: [
+ *       event
+ *     ]
+ *     description: Creates a new event
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Event'
+ *       description: Created expense object
+ *       required: true
+ *     responses:
+ *       400:
+ *         description: Bad Request - required values are missing.
+ *       201:
+ *         description: Event Created
+ */
+eventRouter
+  .route("/")
+  .post(
+    [
+      check("name")
+        .exists()
+        .trim()
+        .isLength({ min: 3 })
+        .withMessage("the event's name must have a minimum length of 3"),
+      check("start_date")
+        .exists()
+        .isDate()
+        .withMessage("The event must have a valid start date"),
+      check("end_date")
+        .optional()
+        .isDate()
+        .withMessage("The event must have a valid end date"),
+      check("type_id").optional().isInt(),
+    ],
+    validation.validate,
+    eventController.createEvent
+  );
 
-eventRouter.route("/:eventId").get((req, res) => {
-  res.send("Get Single vue academy" + req.params.eventId);
-});
+eventRouter.route("/").get(eventController.getAllEvents);
 
-eventRouter.route("/").post((req, res) => {
-  res.send("Create vue academy");
-});
+eventRouter.route("/:eventId(\\d+)").get(eventController.getEventById);
 
-eventRouter.route("/:eventId").put((req, res) => {
-  res.send("Update vue academy" + req.params.eventId);
-});
+eventRouter
+  .route("/:eventId")
+  .put(
+    [
+      check("name")
+        .exists()
+        .trim()
+        .isLength({ min: 3 })
+        .withMessage("the event's name must have a minimum length of 3"),
+      check("start_date")
+        .exists()
+        .isDate()
+        .withMessage("The event must have a valid start date"),
+      check("end_date")
+        .optional()
+        .isDate()
+        .withMessage("The event must have a valid end date"),
+      check("type_id").optional().isInt(),
+    ],
+    validation.validate,
+    eventController.updateEvent
+  );
 
-eventRouter.route("/:eventId").delete((req, res) => {
-  res.send("Delete vue academy" + req.params.eventId);
-});
+eventRouter.route("/:eventId").delete(eventController.deleteEventById);
 
 export { eventRouter };
