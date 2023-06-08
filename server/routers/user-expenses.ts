@@ -43,9 +43,8 @@ const userExpenseRouter = Router();
  * @swagger
  * /user_expense:
  *   post:
- *     tags: [
- *       user-expense
- *     ]
+ *     tags:
+ *      - user-expense
  *     description: Creates a new user-expense object
  *     requestBody:
  *       content:
@@ -98,8 +97,8 @@ userExpenseRouter.route("/").get(userExpenseController.getAllUserExpenses);
  * /user_expense/{userExpenseId}:
  *   get:
  *     description: Retrieves a single user-expense object based on its id.
- *     tags: [
- *       user-expense
+ *     tags:
+ *      - user-expense
  *     parameters:
  *       - name: userExpenseId
  *         in: path
