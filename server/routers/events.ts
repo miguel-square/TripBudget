@@ -80,10 +80,76 @@ eventRouter
     eventController.createEvent
   );
 
+/**
+ * @swagger
+ * /event:
+ *   get:
+ *     description: Retrieves an event object array.
+ *     tags:
+ *      - event
+ *     responses:
+ *       200:
+ *         description: A valid array of events object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Event'
+ */
 eventRouter.route("/").get(eventController.getAllEvents);
 
+/**
+ * @swagger
+ * /event/{eventId}:
+ *   get:
+ *     description: Retrieves a single event object based on its id.
+ *     tags: [
+ *       event
+ *     ]
+ *     parameters:
+ *       - name: eventId
+ *         in: path
+ *         type: integer
+ *         description: The ID of the requested event.
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Event'
+ *       204:
+ *         description: No content
+ */
 eventRouter.route("/:eventId(\\d+)").get(eventController.getEventById);
 
+/**
+ * @swagger
+ * /event/{eventId}:
+ *   put:
+ *     description: Updates a event object based on its id.
+ *     tags:
+ *      - event
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Numeric ID of the event to update.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: A valid event object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Event'
+ */
 eventRouter
   .route("/:eventId")
   .put(
@@ -107,6 +173,24 @@ eventRouter
     eventController.updateEvent
   );
 
+/**
+ * @swagger
+ * /event/{eventId}:
+ *   delete:
+ *     description: Deletes a event object based on its id.
+ *     tags:
+ *      - event
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Numeric ID of the event to delete.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: The event has been deleted.
+ */
 eventRouter.route("/:eventId").delete(eventController.deleteEventById);
 
 export { eventRouter };

@@ -63,12 +63,78 @@ eventUserRouter
     eventUserController.createEventUser
   );
 
+/**
+ * @swagger
+ * /event_user:
+ *   get:
+ *     description: Retrieves a user-event objects array.
+ *     tags:
+ *      - event-user
+ *     responses:
+ *       200:
+ *         description: A valid array of user-events objects.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/EventUser'
+ */
 eventUserRouter.route("/").get(eventUserController.getAllEventUsers);
 
+/**
+ * @swagger
+ * /event_user/{eventUserId}:
+ *   get:
+ *     description: Retrieves a single event-user object based on its id.
+ *     tags: [
+ *       event-user
+ *     ]
+ *     parameters:
+ *       - name: eventUserId
+ *         in: path
+ *         type: integer
+ *         description: The ID of the requested event-user.
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/EventUser'
+ *       204:
+ *         description: No content
+ */
 eventUserRouter
   .route("/:eventUserId(\\d+)")
   .get(eventUserController.getEventUserById);
 
+/**
+ * @swagger
+ * /event_user/{eventUserId}:
+ *   put:
+ *     description: Updates a event-user object based on its id.
+ *     tags:
+ *      - event-user
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Numeric ID of the event-user to update.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: A valid event-user object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/EventUser'
+ */
 eventUserRouter
   .route("/:eventUserId")
   .put(
@@ -81,6 +147,24 @@ eventUserRouter
     eventUserController.updateEventUser
   );
 
+/**
+ * @swagger
+ * /event_user/{eventUserId}:
+ *   delete:
+ *     description: Deletes a event-user object based on its id.
+ *     tags:
+ *      - event-user
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Numeric ID of the event-user object to delete.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: The event-user object has been deleted.
+ */
 eventUserRouter
   .route("/:eventUserId")
   .delete(eventUserController.deleteEventUserById);

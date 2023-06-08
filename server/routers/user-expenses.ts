@@ -74,12 +74,77 @@ userExpenseRouter
     userExpenseController.createUserExpense
   );
 
+/**
+ * @swagger
+ * /user_expense:
+ *   get:
+ *     description: Retrieves a user-expense objects array.
+ *     tags:
+ *      - user-expense
+ *     responses:
+ *       200:
+ *         description: A valid array of user-expenses objects.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/UserExpense'
+ */
 userExpenseRouter.route("/").get(userExpenseController.getAllUserExpenses);
 
+/**
+ * @swagger
+ * /user_expense/{userExpenseId}:
+ *   get:
+ *     description: Retrieves a single user-expense object based on its id.
+ *     tags: [
+ *       user-expense
+ *     parameters:
+ *       - name: userExpenseId
+ *         in: path
+ *         type: integer
+ *         description: The ID of the requested user-expense.
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/UserExpense'
+ *       204:
+ *         description: No content
+ */
 userExpenseRouter
   .route("/:userExpenseId(\\d+)")
   .get(userExpenseController.getUserExpenseById);
 
+/**
+ * @swagger
+ * /user_expense/{userExpenseId}:
+ *   put:
+ *     description: Updates a user-expense object based on its id.
+ *     tags:
+ *      - user-expense
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Numeric ID of the user-expense to update.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: A valid user-expense object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/UserExpense'
+ */
 userExpenseRouter
   .route("/:userExpenseId")
   .put(
@@ -94,6 +159,24 @@ userExpenseRouter
     userExpenseController.updateUserExpense
   );
 
+/**
+ * @swagger
+ * /user_expense/{userExpenseId}:
+ *   delete:
+ *     description: Deletes a user-expense object based on its id.
+ *     tags:
+ *      - user-expense
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Numeric ID of the user-expense object to delete.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: The user-expense object has been deleted.
+ */
 userExpenseRouter
   .route("/:userExpenseId")
   .delete(userExpenseController.deleteUserExpenseById);
