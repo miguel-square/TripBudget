@@ -1,14 +1,15 @@
 import { Request, Response } from "express";
+import bcrypt from "bcrypt";
 import { prisma } from "../utils/prisma";
 
 async function createUser(req: Request, res: Response) {
   const { email, username, password } = req.body;
-  // const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 10);
   const user = await prisma.user.create({
     data: {
       email: email,
       username: username,
-      password: password,
+      password: hashedPassword,
     },
   });
   res.status(201).json(user);
@@ -26,7 +27,7 @@ async function getAllUsers(req: Request, res: Response) {
 async function updateUser(req: Request, res: Response) {
   const { user_id } = req.params;
   const { email, username, password } = req.body;
-  // const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 10);
   await prisma.user.update({
     where: {
       id: parseInt(user_id),
@@ -34,7 +35,7 @@ async function updateUser(req: Request, res: Response) {
     data: {
       email: email,
       username: username,
-      password: password,
+      password: hashedPassword,
     },
   });
   res.sendStatus(204);
