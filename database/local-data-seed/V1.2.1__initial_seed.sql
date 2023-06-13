@@ -8,7 +8,7 @@ VALUES ('Trip');
 
 -- Seed table: user
 INSERT INTO public.user (username, email, first_name, second_name, password)
-VALUES ('miguelc', 'miguel@example.com', 'Miguel', 'Carrillo', '$2b$10$bDoSWAc8zl46LhoX3c4BIuvzJL1AjPED66b1jJJYQ/TLe5CY93DyK');
+VALUES ('miguelc', 'miguel@example.com', 'Miguel', 'Carrillo', '$2a$10$bIhY4RepumBNzfhYqu8J/OUDXvi8pCB0DmNqMvqo0IB4dCFLaVxBi');
 
 -- Seed table: event
 INSERT INTO public.event (name, start_date, end_date, type_id)
