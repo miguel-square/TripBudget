@@ -54,7 +54,7 @@ authRouter
 /**
  * @swagger
  * /auth/refresh:
- *   post:
+ *   get:
  *     tags: [
  *       auth
  *     ]

@@ -9,18 +9,35 @@ import {
   userExpenseRouter,
   authRouter,
 } from "./routers/index";
-import { verifyToken } from "./middleware/auth";
+import { verifyToken } from "./middleware/authentication";
 
 const swaggerDefinition = {
   openapi: "3.0.0",
   info: {
-    title: "TripBud App",
+    title: "Tripbudget App API",
     version: "1.0.0",
   },
   servers: [
     {
-      url: "http://localhost:3000",
+      url: "",
       description: "Local development server",
+    },
+  ],
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: "http",
+        in: "header",
+        name: "Authorization",
+        description: "Bearer token to access these api endpoints",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+      },
+    },
+  },
+  security: [
+    {
+      bearerAuth: [],
     },
   ],
 };

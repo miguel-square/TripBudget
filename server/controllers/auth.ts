@@ -14,6 +14,7 @@ async function authenticate(req: Request, res: Response) {
 
   const user = users && users.length > 0 && users[0];
 
+  console.log(user);
   if (user) {
     const passwordCorrect = await bcrypt.compare(password, user.password);
 
@@ -34,7 +35,7 @@ async function authenticate(req: Request, res: Response) {
 }
 
 async function refresh(req: Request, res: Response) {
-  const userId = res.locals.user as number;
+  const userId = res.locals.userId as number;
 
   var user = await prisma.user.findUnique({
     where: {

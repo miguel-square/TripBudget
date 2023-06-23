@@ -9,10 +9,7 @@ const handleTest = (res: Response, next: NextFunction) => {
 
 const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
   if (process.env.NODE_ENV === "test") return handleTest(res, next);
-  if (
-    (req.path === "/api/authenticate" || req.path === "/user") &&
-    req.method == "POST"
-  ) {
+  if ((req.path === "/auth" || req.path === "/user") && req.method == "POST") {
     return next();
   }
 
@@ -23,7 +20,7 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const tokenVerified = checkTokenValidity(
         token,
-        req.path === "/api/authenticate/refresh"
+        req.path === "/auth/refresh"
           ? REFRESH_TOKEN_SECRET
           : ACCESS_TOKEN_SECRET
       );
